@@ -8,6 +8,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +26,12 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text('Введите предложение', style: TextStyle(fontSize: 24)),
+              const Text('Введите предложение', style: TextStyle(fontSize: 24)),
 
               SizedBox(height: 20),
 
               TextField(
+                controller: _controller,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Введите текст',
@@ -48,11 +57,19 @@ class _HomePageState extends State<HomePage> {
 
               SizedBox(height: 60),
 
-              ElevatedButton(onPressed: null, child: Text('Отправить')),
+              ElevatedButton(
+                onPressed: onButtonPressed,
+                child: const Text('Отправить'),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void onButtonPressed() {
+    print(_controller.text);
+    _controller.clear();
   }
 }
