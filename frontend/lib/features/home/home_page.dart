@@ -9,6 +9,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
+  String _result = "";
 
   @override
   void dispose() {
@@ -61,6 +62,9 @@ class _HomePageState extends State<HomePage> {
                 onPressed: onButtonPressed,
                 child: const Text('Отправить'),
               ),
+
+              SizedBox(height: 20),
+              Text(_result, style: TextStyle(fontSize: 18)),
             ],
           ),
         ),
@@ -69,7 +73,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void onButtonPressed() {
-    print(_controller.text);
+    setState(() {
+      if (_controller.text.trim().isEmpty) {
+        _result = "Введите предложение";
+      } else {
+        _result = _controller.text;
+      }
+    });
     _controller.clear();
   }
 }
