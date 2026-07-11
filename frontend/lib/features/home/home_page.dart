@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String _result = "";
+  bool _isButtonEnabled = false;
 
   @override
   void dispose() {
@@ -33,6 +34,7 @@ class _HomePageState extends State<HomePage> {
 
               TextField(
                 controller: _controller,
+                onChanged: onTextChanged,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Введите текст',
@@ -59,7 +61,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 60),
 
               ElevatedButton(
-                onPressed: onButtonPressed,
+                onPressed: _isButtonEnabled ? onButtonPressed : null,
                 child: const Text('Отправить'),
               ),
 
@@ -79,7 +81,14 @@ class _HomePageState extends State<HomePage> {
       } else {
         _result = _controller.text;
       }
+      _isButtonEnabled = false;
     });
     _controller.clear();
+  }
+
+  void onTextChanged(String text) {
+    setState(() {
+      _isButtonEnabled = text.trim().isNotEmpty;
+    });
   }
 }
