@@ -11,6 +11,7 @@ class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
   String _result = "";
   bool _isButtonEnabled = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -54,7 +55,9 @@ class _HomePageState extends State<HomePage> {
               ),
 
               SizedBox(height: 20),
-              Text(_result, style: TextStyle(fontSize: 18)),
+              _isLoading
+                  ? CircularProgressIndicator()
+                  : Text(_result, style: TextStyle(fontSize: 18)),
             ],
           ),
         ),
@@ -62,16 +65,21 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void onButtonPressed() {
+  Future<void> onButtonPressed() async {
+    final text = _controller.text.trim();
+    _controller.clear();
+
     setState(() {
-      if (_controller.text.trim().isEmpty) {
-        _result = "Введите предложение";
-      } else {
-        _result = _controller.text;
-      }
+      _isLoading = true;
       _isButtonEnabled = false;
     });
-    _controller.clear();
+
+    await Future.delayed(Duration(seconds: 2));
+
+    setState(() {
+      _isLoading = false;
+      _result = text;
+    });
   }
 
   void onTextChanged(String text) {
