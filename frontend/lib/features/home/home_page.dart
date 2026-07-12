@@ -57,7 +57,19 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 20),
               _isLoading
                   ? CircularProgressIndicator()
-                  : Text(_result, style: TextStyle(fontSize: 18)),
+                  : _result.isNotEmpty
+                  ? Card(
+                      elevation: 4,
+                      margin: const EdgeInsets.only(top: 20),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Text(
+                          _result,
+                          style: const TextStyle(fontSize: 18),
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         ),
