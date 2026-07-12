@@ -38,21 +38,9 @@ class _HomePageState extends State<HomePage> {
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Введите текст',
-                  suffixIcon: Icon(Icons.clear),
-
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.grey, width: 1.5),
-                  ),
-                  // Состояние фокуса (когда пользователь нажал на поле)
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.blue, width: 2.0),
-                  ),
-                  // Состояние ошибки (если поле завалило валидацию)
-                  errorBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide(color: Colors.red, width: 2.0),
+                  suffixIcon: IconButton(
+                    icon: Icon(Icons.clear),
+                    onPressed: onClearPressed,
                   ),
                 ),
                 style: TextStyle(fontSize: 18, color: Colors.blue),
@@ -89,6 +77,13 @@ class _HomePageState extends State<HomePage> {
   void onTextChanged(String text) {
     setState(() {
       _isButtonEnabled = text.trim().isNotEmpty;
+    });
+  }
+
+  void onClearPressed() {
+    _controller.clear();
+    setState(() {
+      _isButtonEnabled = false;
     });
   }
 }
