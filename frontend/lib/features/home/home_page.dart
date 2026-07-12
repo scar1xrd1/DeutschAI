@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/services/ai_service.dart';
+import 'package:frontend/models/sentence_check_result.dart';
+import 'package:frontend/widgets/result_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -9,9 +12,11 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final TextEditingController _controller = TextEditingController();
-  String _result = "";
-  bool _isButtonEnabled = false;
-  bool _isLoading = false;
+  SentenceCheckResult?
+  _result; // Переменная для хранения результата проверки предложения
+  bool _isButtonEnabled = false; // Переключатель возможности нажатия кнопки
+  bool _isLoading = false; // Переключатель состояния загрузки
+  final AIService _aiService = AIService();
 
   @override
   void dispose() {
@@ -21,6 +26,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final result = _result;
+
     return Scaffold(
       appBar: AppBar(title: const Text('DeutschAI')),
       body: Center(
@@ -31,7 +38,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               const Text('Введите предложение', style: TextStyle(fontSize: 24)),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
 
               TextField(
                 controller: _controller,
@@ -47,29 +54,20 @@ class _HomePageState extends State<HomePage> {
                 style: TextStyle(fontSize: 18, color: Colors.blue),
               ),
 
-              SizedBox(height: 60),
+              const SizedBox(height: 60),
 
               ElevatedButton(
                 onPressed: _isButtonEnabled ? onButtonPressed : null,
                 child: const Text('Отправить'),
               ),
 
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
+
               _isLoading
-                  ? CircularProgressIndicator()
-                  : _result.isNotEmpty
-                  ? Card(
-                      elevation: 4,
-                      margin: const EdgeInsets.only(top: 20),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Text(
-                          _result,
-                          style: const TextStyle(fontSize: 18),
-                        ),
-                      ),
-                    )
-                  : Container(),
+                  ? const CircularProgressIndicator()
+                  : result != null
+                  ? ResultCard(result: result)
+                  : const SizedBox.shrink(),
             ],
           ),
         ),
@@ -90,7 +88,7 @@ class _HomePageState extends State<HomePage> {
 
     setState(() {
       _isLoading = false;
-      _result = text;
+      _result = _aiService.checkSentence(text);
     });
   }
 
