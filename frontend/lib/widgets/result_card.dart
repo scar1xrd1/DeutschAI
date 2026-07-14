@@ -10,19 +10,26 @@ class ResultCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 4,
+      color: const Color.fromARGB(255, 44, 46, 53),
       margin: const EdgeInsets.only(top: 20),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            Text(result.correctedText, style: const TextStyle(fontSize: 18)),
+            Text(
+              result.correctedText,
+              style: const TextStyle(fontSize: 22, color: Colors.white),
+            ),
 
             const SizedBox(height: 12),
 
             if (result.tip.isNotEmpty)
               Text(
                 result.tip,
-                style: const TextStyle(fontSize: 18, color: Colors.orange),
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Color.fromARGB(255, 227, 136, 0),
+                ),
               ),
 
             const SizedBox(height: 12),
@@ -38,7 +45,7 @@ class ResultCard extends StatelessWidget {
                           error,
                           style: const TextStyle(
                             fontSize: 18,
-                            color: Colors.red,
+                            color: Color.fromARGB(255, 186, 12, 0),
                           ),
                         ),
                       )
