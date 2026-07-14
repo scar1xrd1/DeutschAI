@@ -29,36 +29,76 @@ class _HomePageState extends State<HomePage> {
     final result = _result;
 
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 34, 36, 42),
+
       appBar: AppBar(title: const Text('DeutschAI')),
       body: Center(
         child: SizedBox(
-          width: 300,
+          width: 400,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Введите предложение', style: TextStyle(fontSize: 24)),
+              const Text('Gib einen Satz ein', style: TextStyle(fontSize: 24)),
 
               const SizedBox(height: 20),
 
               TextField(
                 controller: _controller,
                 onChanged: onTextChanged,
+
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) {
+                  if (_isButtonEnabled) {
+                    onButtonPressed();
+                  }
+                },
+
                 decoration: InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Введите текст',
+                  filled: true,
+                  fillColor: Color.fromARGB(255, 54, 56, 64),
+
+                  hintText: 'Satz eingeben', // hint text
+                  hintStyle: const TextStyle(
+                    color: Color.fromARGB(255, 176, 177, 182),
+                  ),
+                  floatingLabelStyle: const TextStyle(
+                    color: Color.fromARGB(0, 93, 93, 93),
+                  ),
+
                   suffixIcon: IconButton(
+                    color: Color.fromARGB(255, 226, 228, 236),
                     icon: Icon(Icons.clear),
                     onPressed: onClearPressed,
                   ),
+
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 54, 56, 64),
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                    borderSide: const BorderSide(
+                      color: Color.fromARGB(255, 226, 228, 236),
+                    ),
+                  ),
                 ),
-                style: TextStyle(fontSize: 18, color: Colors.blue),
+                cursorColor: const Color.fromARGB(255, 226, 228, 236),
+                style: TextStyle(
+                  fontSize: 18,
+                  color: const Color.fromARGB(255, 226, 228, 236),
+                ),
               ),
 
               const SizedBox(height: 60),
 
               ElevatedButton(
                 onPressed: _isButtonEnabled ? onButtonPressed : null,
-                child: const Text('Отправить'),
+                child: const Text('Satz prüfen'),
               ),
 
               const SizedBox(height: 20),
@@ -84,11 +124,11 @@ class _HomePageState extends State<HomePage> {
       _isButtonEnabled = false;
     });
 
-    await Future.delayed(Duration(seconds: 2));
+    final result = await _aiService.checkSentence(text);
 
     setState(() {
       _isLoading = false;
-      _result = _aiService.checkSentence(text);
+      _result = result;
     });
   }
 
