@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:frontend/services/ai_service.dart';
 import 'package:frontend/models/sentence_check_result.dart';
 import 'package:frontend/widgets/result_card.dart';
+import 'package:frontend/widgets/send_button.dart';
+import 'package:frontend/theme/app_colors.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,8 +31,7 @@ class _HomePageState extends State<HomePage> {
     final result = _result;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 34, 36, 42),
-
+      backgroundColor: AppColors.background,
       appBar: AppBar(title: const Text('DeutschAI')),
       body: Center(
         child: SizedBox(
@@ -38,13 +39,12 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text('Gib einen Satz ein', style: TextStyle(fontSize: 24)),
-
-              const SizedBox(height: 20),
-
               TextField(
                 controller: _controller,
                 onChanged: onTextChanged,
+
+                minLines: 1,
+                maxLines: 8,
 
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) {
@@ -55,56 +55,50 @@ class _HomePageState extends State<HomePage> {
 
                 decoration: InputDecoration(
                   filled: true,
-                  fillColor: Color.fromARGB(255, 54, 56, 64),
+                  fillColor: AppColors.surfaceLight,
 
-                  hintText: 'Satz eingeben', // hint text
-                  hintStyle: const TextStyle(
-                    color: Color.fromARGB(255, 176, 177, 182),
-                  ),
+                  hintText: 'Gib einen Satz ein', // hint text
+                  hintStyle: const TextStyle(color: AppColors.hint),
                   floatingLabelStyle: const TextStyle(
-                    color: Color.fromARGB(0, 93, 93, 93),
+                    color: AppColors.textSecondary,
                   ),
 
-                  suffixIcon: IconButton(
-                    color: Color.fromARGB(255, 226, 228, 236),
-                    icon: Icon(Icons.clear),
-                    onPressed: onClearPressed,
+                  suffixIcon: Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: SendButton(
+                      enabled: _isButtonEnabled,
+                      loading: _isLoading,
+                      onPressed: onButtonPressed,
+                      onLongPressed: onClearPressed,
+                    ),
                   ),
 
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12.0),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 54, 56, 64),
-                    ),
+                    borderRadius: BorderRadius.circular(28.0),
+                    borderSide: const BorderSide(color: AppColors.border),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                    borderSide: const BorderSide(
-                      color: Color.fromARGB(255, 226, 228, 236),
-                    ),
+                    borderRadius: BorderRadius.circular(28.0),
+                    borderSide: const BorderSide(color: AppColors.primary),
                   ),
                 ),
-                cursorColor: const Color.fromARGB(255, 226, 228, 236),
-                style: TextStyle(
-                  fontSize: 18,
-                  color: const Color.fromARGB(255, 226, 228, 236),
-                ),
+                cursorColor: AppColors.primary,
+                style: TextStyle(fontSize: 18, color: AppColors.textPrimary),
               ),
 
               const SizedBox(height: 60),
 
-              ElevatedButton(
-                onPressed: _isButtonEnabled ? onButtonPressed : null,
-                child: const Text('Satz prüfen'),
-              ),
-
+              // ElevatedButton(
+              //   onPressed: _isButtonEnabled ? onButtonPressed : null,
+              //   child: const Text('Satz prüfen'),
+              // ),
               const SizedBox(height: 20),
 
               _isLoading
-                  ? const CircularProgressIndicator()
+                  ? const SizedBox.shrink()
                   : result != null
                   ? ResultCard(result: result)
                   : const SizedBox.shrink(),
